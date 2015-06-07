@@ -6,15 +6,30 @@ app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname + '/index.html'));
 });
 
-// create routes for the admin section
-// get an instance of the router
+app.route('/login')
+  .get(function(req, res) {
+    res.send('this is a the login form');
+  })
+  .post(function(req, res) {
+    console.log('processing');
+    res.send('processing the login form');
+  });
 
 var adminRouter = express.Router();
-
 
 adminRouter.use(function(req, res, next) { // route middleware that will happen on every request.
   console.log(req.method, req.url);        // log each request to the console
   next();                                  // continue doing what we were doing and go to the route
+});
+
+// route middleware to validate :name
+adminRouter.param('name', 
+  function(req, res, next, name) { 
+  console.log(
+    'this is where we would do some validation on :name\n',
+    'doing name validations on ' + name);
+  req.name = name; // once validation is done, save the new item in req.
+  next();          // go to the next thing
 });
 
 adminRouter
